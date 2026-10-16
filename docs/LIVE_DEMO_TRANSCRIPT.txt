@@ -1,0 +1,138 @@
+FIRST REAL JVM PROCESS
+Smart Parking Garage | persisted store: /tmp/garage-live-x4msu6p6
+Pending work is retained. Inspect with 2, recover explicitly with 9.
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: License plate (example 123ABC01): Whole hours (1-24): ID: 6813fa19-5744-4513-8cb7-fdb1e12a6a3e | workflow=COMPLETED | plate=123ABC01
+A gate=AUTHORIZED | B reservation=RESERVED space=1 | C payment=PAID amount=1000 KZT
+Overstay due at (UTC): 2026-10-11T18:39:55.845956404Z
+Persisted events: A committed -> B committed -> C committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: License plate (example 123ABC01): Whole hours (1-24): ID: a4db19ed-dcdf-41e4-bcc8-b7d2239b7ac9 | workflow=COMPENSATED | plate=BFAIL01
+A gate=REVOKED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Reason: No space available: sensor grid reports a full garage
+Persisted events: A committed -> A revoked
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: License plate (example 123ABC01): Whole hours (1-24): ID: a4a0eb30-7d0f-4e3d-87f6-209d9dabf58a | workflow=COMPENSATED | plate=CFAIL01
+A gate=REVOKED | B reservation=RELEASED space=2 | C payment=DECLINED amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:55.892851234Z
+Reason: Payment terminal declined the card
+Persisted events: A committed -> B committed -> B released -> A revoked
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: License plate (example 123ABC01): Whole hours (1-24): ID: ec0051b8-9a1d-4a63-aef8-5a963450a19a | workflow=PENDING_B | plate=RESTART1
+A gate=AUTHORIZED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Persisted events: A committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: License plate (example 123ABC01): Whole hours (1-24): ID: 248de4d3-c53e-4f8d-9b42-d0fd1fe88e60 | workflow=PENDING_C | plate=RESTART2
+A gate=AUTHORIZED | B reservation=RESERVED space=2 | C payment=NONE amount=0 KZT
+Persisted events: A committed -> B committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: ID: 6813fa19-5744-4513-8cb7-fdb1e12a6a3e | workflow=COMPLETED | plate=123ABC01
+A gate=AUTHORIZED | B reservation=RESERVED space=1 | C payment=PAID amount=1000 KZT
+Overstay due at (UTC): 2026-10-11T18:39:55.845956404Z
+Persisted events: A committed -> B committed -> C committed
+ID: a4db19ed-dcdf-41e4-bcc8-b7d2239b7ac9 | workflow=COMPENSATED | plate=BFAIL01
+A gate=REVOKED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Reason: No space available: sensor grid reports a full garage
+Persisted events: A committed -> A revoked
+ID: a4a0eb30-7d0f-4e3d-87f6-209d9dabf58a | workflow=COMPENSATED | plate=CFAIL01
+A gate=REVOKED | B reservation=RELEASED space=2 | C payment=DECLINED amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:55.892851234Z
+Reason: Payment terminal declined the card
+Persisted events: A committed -> B committed -> B released -> A revoked
+ID: ec0051b8-9a1d-4a63-aef8-5a963450a19a | workflow=PENDING_B | plate=RESTART1
+A gate=AUTHORIZED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Persisted events: A committed
+ID: 248de4d3-c53e-4f8d-9b42-d0fd1fe88e60 | workflow=PENDING_C | plate=RESTART2
+A gate=AUTHORIZED | B reservation=RESERVED space=2 | C payment=NONE amount=0 KZT
+Persisted events: A committed -> B committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: 
+SECOND REAL JVM PROCESS AGAINST THE SAME STORE
+Smart Parking Garage | persisted store: /tmp/garage-live-x4msu6p6
+Pending work is retained. Inspect with 2, recover explicitly with 9.
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: ID: 6813fa19-5744-4513-8cb7-fdb1e12a6a3e | workflow=COMPLETED | plate=123ABC01
+A gate=AUTHORIZED | B reservation=RESERVED space=1 | C payment=PAID amount=1000 KZT
+Overstay due at (UTC): 2026-10-11T18:39:55.845956404Z
+Persisted events: A committed -> B committed -> C committed
+ID: a4db19ed-dcdf-41e4-bcc8-b7d2239b7ac9 | workflow=COMPENSATED | plate=BFAIL01
+A gate=REVOKED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Reason: No space available: sensor grid reports a full garage
+Persisted events: A committed -> A revoked
+ID: a4a0eb30-7d0f-4e3d-87f6-209d9dabf58a | workflow=COMPENSATED | plate=CFAIL01
+A gate=REVOKED | B reservation=RELEASED space=2 | C payment=DECLINED amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:55.892851234Z
+Reason: Payment terminal declined the card
+Persisted events: A committed -> B committed -> B released -> A revoked
+ID: ec0051b8-9a1d-4a63-aef8-5a963450a19a | workflow=PENDING_B | plate=RESTART1
+A gate=AUTHORIZED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Persisted events: A committed
+ID: 248de4d3-c53e-4f8d-9b42-d0fd1fe88e60 | workflow=PENDING_C | plate=RESTART2
+A gate=AUTHORIZED | B reservation=RESERVED space=2 | C payment=NONE amount=0 KZT
+Persisted events: A committed -> B committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: ID: ec0051b8-9a1d-4a63-aef8-5a963450a19a | workflow=COMPLETED | plate=RESTART1
+A gate=AUTHORIZED | B reservation=RESERVED space=3 | C payment=PAID amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:56.069499420Z
+Persisted events: A committed -> B committed -> C committed
+ID: 248de4d3-c53e-4f8d-9b42-d0fd1fe88e60 | workflow=COMPLETED | plate=RESTART2
+A gate=AUTHORIZED | B reservation=RESERVED space=2 | C payment=PAID amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:56.074767526Z
+Persisted events: A committed -> B committed -> C committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: ID: 6813fa19-5744-4513-8cb7-fdb1e12a6a3e | workflow=COMPLETED | plate=123ABC01
+A gate=AUTHORIZED | B reservation=RESERVED space=1 | C payment=PAID amount=1000 KZT
+Overstay due at (UTC): 2026-10-11T18:39:55.845956404Z
+Persisted events: A committed -> B committed -> C committed
+ID: a4db19ed-dcdf-41e4-bcc8-b7d2239b7ac9 | workflow=COMPENSATED | plate=BFAIL01
+A gate=REVOKED | B reservation=NONE space=0 | C payment=NONE amount=0 KZT
+Reason: No space available: sensor grid reports a full garage
+Persisted events: A committed -> A revoked
+ID: a4a0eb30-7d0f-4e3d-87f6-209d9dabf58a | workflow=COMPENSATED | plate=CFAIL01
+A gate=REVOKED | B reservation=RELEASED space=2 | C payment=DECLINED amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:55.892851234Z
+Reason: Payment terminal declined the card
+Persisted events: A committed -> B committed -> B released -> A revoked
+ID: ec0051b8-9a1d-4a63-aef8-5a963450a19a | workflow=COMPLETED | plate=RESTART1
+A gate=AUTHORIZED | B reservation=RESERVED space=3 | C payment=PAID amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:56.069499420Z
+Persisted events: A committed -> B committed -> C committed
+ID: 248de4d3-c53e-4f8d-9b42-d0fd1fe88e60 | workflow=COMPLETED | plate=RESTART2
+A gate=AUTHORIZED | B reservation=RESERVED space=2 | C payment=PAID amount=500 KZT
+Overstay due at (UTC): 2026-10-11T17:39:56.074767526Z
+Persisted events: A committed -> B committed -> C committed
+
+1 Park  2 Inspect all  3 Full garage (B failure)  4 Declined payment (C failure)
+5 Pause after A  6 Pause after B  7 Resume ID  8 Cancel ID  9 Recover pending
+10 Close/open gate  11 Sensors online/offline  12 Overstay alerts  0 Exit
+Choice: 

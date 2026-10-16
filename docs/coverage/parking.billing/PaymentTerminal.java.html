@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentTerminal.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">smart-parking-garage</a> &gt; <a href="index.source.html" class="el_package">parking.billing</a> &gt; <span class="el_source">PaymentTerminal.java</span></div><h1>PaymentTerminal.java</h1><pre class="source lang-java linenums">package parking.billing;
+
+import java.time.*;
+import java.util.*;
+import parking.store.ParkingException;
+import static parking.store.ParkingException.Reason.*;
+
+public final class PaymentTerminal {
+<span class="fc" id="L9">    public enum Card { APPROVE, DECLINE }</span>
+    private final BillingRepository repository;
+    private final PricingPolicy pricing;
+    private final OverstayAlert alert;
+    private final Clock clock;
+<span class="fc" id="L14">    public PaymentTerminal(BillingRepository repository, PricingPolicy pricing, OverstayAlert alert, Clock clock) {</span>
+<span class="fc" id="L15">        this.repository = repository; this.pricing = pricing; this.alert = alert; this.clock = clock;</span>
+<span class="fc" id="L16">    }</span>
+    public Payment confirm(String id, int hours, Card card) {
+<span class="fc" id="L18">        int amount = pricing.amountFor(hours);</span>
+<span class="fc" id="L19">        Payment payment = repository.find(id).orElseGet(() -&gt; new Payment(id, amount, alert.dueAt(clock.instant(), hours), Payment.Status.NEW));</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        if (payment.amount() != amount) throw new ParkingException(CONFLICT, &quot;Existing payment has a different amount&quot;);</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (payment.status() == Payment.Status.PAID) return payment;</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (payment.status() == Payment.Status.DECLINED) throw new ParkingException(PAYMENT_DECLINED, &quot;Payment was declined&quot;);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (payment.status() != Payment.Status.NEW) throw new ParkingException(CONFLICT, &quot;Payment has already been cancelled or refunded&quot;);</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (card == null) throw new ParkingException(INVALID_INPUT, &quot;Payment decision is required&quot;);</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        if (card == Card.DECLINE) {</span>
+<span class="fc" id="L26">            payment.decline(); repository.save(payment);</span>
+<span class="fc" id="L27">            throw new ParkingException(PAYMENT_DECLINED, &quot;Payment terminal declined the card&quot;);</span>
+        }
+<span class="fc" id="L29">        payment.pay(); repository.save(payment); return payment;</span>
+    }
+    public void reverse(String id) {
+<span class="fc" id="L32">        repository.find(id).ifPresent(payment -&gt; {</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            if (payment.status() == Payment.Status.PAID) { payment.refund(); repository.save(payment); }</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            else if (payment.status() == Payment.Status.NEW) { payment.cancel(); repository.save(payment); }</span>
+<span class="fc" id="L35">        });</span>
+<span class="fc" id="L36">    }</span>
+<span class="fc" id="L37">    public Optional&lt;Payment&gt; find(String id) { return repository.find(id); }</span>
+<span class="fc" id="L38">    public List&lt;Payment&gt; all() { return repository.all(); }</span>
+<span class="fc" id="L39">    public List&lt;String&gt; overdueIds() { return repository.all().stream().filter(p -&gt; alert.isOverdue(p, clock.instant())).map(Payment::id).toList(); }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
